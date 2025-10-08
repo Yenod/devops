@@ -77,8 +77,8 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "SELECT emp_no, first_name, last_name "
-                            + "FROM employees "
+                    "SELECT emp_no, first_name, last_name, title, salary, dept_name, manager "
+                            + "FROM employees JOIN titles ON emp_no"
                             + "WHERE emp_no = " + ID;
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
@@ -90,6 +90,7 @@ public class App
                 emp.emp_no = rset.getInt("emp_no");
                 emp.first_name = rset.getString("first_name");
                 emp.last_name = rset.getString("last_name");
+                emp.title = rset.getString("title");
                 return emp;
             }
             else
