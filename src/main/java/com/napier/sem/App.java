@@ -77,9 +77,9 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "SELECT emp_no, first_name, last_name, title "
-                            + "FROM employees JOIN titles ON emp_no=emp_no "
-                            + "WHERE emp_no = " + ID;
+                    "SELECT employees.emp_no, first_name, last_name, title "
+                            + "FROM employees JOIN titles ON employees.emp_no = titles.emp_no "
+                            + "WHERE employees.emp_no = " + ID;
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Return new employee if valid.
