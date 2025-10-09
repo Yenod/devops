@@ -77,9 +77,16 @@ public class App
             Statement stmt = con.createStatement();
             // Create string for SQL statement
             String strSelect =
-                    "SELECT employees.emp_no, first_name, last_name, title "
-                            + "FROM employees JOIN titles ON employees.emp_no = titles.emp_no "
-                            + "WHERE employees.emp_no = " + ID;
+                    "SELECT e.emp_no, e.first_name, e.last_name, t.title, s.salary, d.dept_name, "
+                            + "mng.first_name AS manager_first_name, mng.last_name AS manager_last_name "
+                            + "FROM employees e "
+                            + "JOIN titles t ON e.emp_no = t.emp_no AND t.to_date = (SELECT MAX(to_date) FROM titles WHERE emp_no = e.emp_no) "
+                            + "JOIN salaries s ON e.emp_no = s.emp_no AND s.to_date = (SELECT MAX(to_date) FROM salaries WHERE emp_no = e.emp_no) "
+                            + "JOIN dept_emp de ON e.emp_no = de.emp_no AND de.to_date = (SELECT MAX(to_date) FROM dept_emp WHERE emp_no = e.emp_no) "
+                            + "JOIN departments d ON de.dept_no = d.dept_no "
+                            + "JOIN dept_manager dm ON de.dept_no = dm.dept_no AND de.to_date BETWEEN dm.from_date AND dm.to_date "
+                            + "JOIN employees mng ON dm.emp_no = mng.emp_no "
+                            + "WHERE e.emp_no = " + ID;
             // Execute SQL statement
             ResultSet rset = stmt.executeQuery(strSelect);
             // Return new employee if valid.
@@ -91,6 +98,10 @@ public class App
                 emp.first_name = rset.getString("first_name");
                 emp.last_name = rset.getString("last_name");
                 emp.title = rset.getString("title");
+                emp.salary = rset.getInt("salary");
+                emp.dept_name = rset.getString("dept_name");
+                emp.manager = rset.getString("manager_first_name") + " "
+                        + rset.getString("manager_last_name");
                 return emp;
             }
             else
