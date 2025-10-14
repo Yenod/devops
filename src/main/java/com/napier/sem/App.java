@@ -130,6 +130,41 @@ public class App
         }
     }
 
+    public void displaySalariesByRole(String role)
+    {
+        try
+        {
+            String strSelect = "SELECT e.emp_no, e.first_name, e.last_name, s.salary "
+                    + "FROM employees e "
+                    + "JOIN titles t ON e.emp_no = t.emp_no "
+                    + "JOIN salaries s ON e.emp_no = s.emp_no "
+                    + "WHERE t.title = ? "
+                    + " AND t.to_date = '9999-01-01' "
+                    + "AND s.to_date = '9999-01-01' "
+                    + "ORDER BY e.emp_no ASC";
+
+            PreparedStatement pstmt = con.prepareStatement(strSelect);
+            pstmt.setString(1, role);
+            ResultSet rset = pstmt.executeQuery();
+
+            System.out.printf("%-8s %-15s %-15s %-10s%n", "Emp No", "First Name", "Last Name", "Salary");
+            while (rset.next())
+            {
+                int empNo = rset.getInt("emp_no");
+                String firstName = rset.getString("first_name");
+                String lastName = rset.getString("last_name");
+                int salary = rset.getInt("salary");
+
+                System.out.printf("%-8d %-15s %-15s %-10d%n", empNo, firstName, lastName, salary);
+            }
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            System.out.println("Failed to get role salary details");
+        }
+    }
+
     public static void main(String[] args)
     {
         // Create new Application
@@ -141,6 +176,8 @@ public class App
         Employee emp = a.getEmployee(255530);
         // Display results
         a.displayEmployee(emp);
+
+        a.displaySalariesByRole("Engineer");
 
         // Disconnect from database
         a.disconnect();
