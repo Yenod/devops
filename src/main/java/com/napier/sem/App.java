@@ -205,6 +205,24 @@ public class App
         }
     }
 
+    /**
+     * Prints a list of employees.
+     * @param employees The list of employees to print.
+     */
+    public void printSalaries(ArrayList<Employee> employees)
+    {
+        // Print header
+        System.out.println(String.format("%-10s %-15s %-20s %-8s", "Emp No", "First Name", "Last Name", "Salary"));
+        // Loop over all employees in the list
+        for (Employee emp : employees)
+        {
+            String emp_string =
+                    String.format("%-10s %-15s %-20s %-8s",
+                            emp.emp_no, emp.first_name, emp.last_name, emp.salary);
+            System.out.println(emp_string);
+        }
+    }
+
     public static void main(String[] args)
     {
         // Create new Application
@@ -218,6 +236,8 @@ public class App
         a.displayEmployee(emp);
 
         a.displaySalariesByRole("Engineer");
+
+        ArrayList<Employee> salaries = a.getAllSalaries();
 
         // Disconnect from database
         a.disconnect();
