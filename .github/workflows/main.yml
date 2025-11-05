@@ -49,6 +49,7 @@ jobs:
           directory: ./target/site/jacoco
           flags: Integration Tests # optional
           verbose: true # optional (default = false)
+          # token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
     name: Build and Start Using docker-compose
