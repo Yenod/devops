@@ -13,7 +13,7 @@ public class App
     /**
      * Connect to the MySQL database.
      */
-    public void connect()
+    public void connect(String location, int delay)
     {
         try
         {
@@ -33,9 +33,9 @@ public class App
             try
             {
                 // Wait a bit for db to start
-                Thread.sleep(30000);
+                Thread.sleep(delay);
                 // Connect to database
-                con = DriverManager.getConnection("jdbc:mysql://db:3306/employees?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
+                con = DriverManager.getConnection("jdbc:mysql://" + location + "/employees?allowPublicKeyRetrieval=true&useSSL=false", "root", "example");
                 System.out.println("Successfully connected");
                 break;
             }
@@ -229,7 +229,15 @@ public class App
         App a = new App();
 
         // Connect to database
-        a.connect();
+        if (args.length < 1)
+        {
+            a.connect("localhost:33060", 0);
+        }
+        else
+        {
+            a.connect("db:3306", 30000);
+        }
+
         // Get Employee
         Employee emp = a.getEmployee(255530);
         // Display results
