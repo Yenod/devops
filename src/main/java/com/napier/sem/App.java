@@ -235,7 +235,7 @@ public class App
         }
         else
         {
-            a.connect("db:3306", 30000);
+            a.connect(args[0], Integer.parseInt(args[1]));
         }
 
         // Get Employee
